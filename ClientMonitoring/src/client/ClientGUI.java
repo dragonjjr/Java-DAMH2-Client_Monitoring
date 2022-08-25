@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import javax.swing.JTextField;
 public class ClientGUI extends JPanel implements ActionListener {
     JPanel pn1, pn2, pn3, pn4;
     boolean btnSaveModeClient  = false;
-    JLabel lb_client_ip, lb_client_port;
+    JLabel lb_title,lb_client_ip, lb_client_port;
     JTextField tf_client_ip, tf_client_port;
 
     JButton btnConnect;
@@ -32,7 +33,9 @@ public class ClientGUI extends JPanel implements ActionListener {
 
 
         pn1 = new JPanel();
-
+        
+        lb_title = new JLabel();
+        lb_title.setForeground(Color.RED);
         lb_client_ip = new JLabel();
         lb_client_ip.setForeground(Color.RED);
         lb_client_port = new JLabel();
@@ -45,6 +48,8 @@ public class ClientGUI extends JPanel implements ActionListener {
         tf_client_port.setFont(new Font("Arial", Font.BOLD, 12));
         tf_client_port.setPreferredSize(new Dimension(100, 25));
 
+        pn1.add(lb_title);
+        pn1.add(Box.createRigidArea(new Dimension(10,0)));
         pn1.add(lb_client_ip);
         pn1.add(Box.createRigidArea(new Dimension(10,0)));
         pn1.add(tf_client_ip);
@@ -53,6 +58,7 @@ public class ClientGUI extends JPanel implements ActionListener {
         pn1.add(Box.createRigidArea(new Dimension(10,0)));
         pn1.add(tf_client_port);
 
+        lb_title.setText("Monitoring");
         lb_client_ip.setText("IP : ");
         lb_client_port.setText("Port : ");
 
@@ -78,7 +84,7 @@ public class ClientGUI extends JPanel implements ActionListener {
         newContentPane.setOpaque(true);
         frame.setContentPane(newContentPane);
 
-        frame.setMinimumSize(new Dimension(500,400));
+        frame.setMinimumSize(new Dimension(500,200));
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
