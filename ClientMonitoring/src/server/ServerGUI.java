@@ -21,14 +21,17 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 public class ServerGUI extends JPanel implements ActionListener{
     JPanel pn1, pn2, pn3, pn4, pn_list_client, pn_action_client;
     boolean btnSaveModeServer  = false;
 
     JTextField tf_search_client;
-
+	JTable tbAction;
+	String[] colMedHdr = { "ID", "Time", "Action", "Description" };
     JList list_client;
     JLabel lb_server_ip;
     JLabel lb_server_port;
@@ -85,7 +88,9 @@ public class ServerGUI extends JPanel implements ActionListener{
 
         pn_action_client = new JPanel();
         pn_action_client.setBorder(BorderFactory.createTitledBorder("Action of clients"));
-
+		DefaultTableModel table_model = new DefaultTableModel(colMedHdr, 0);
+		tbAction = new JTable(table_model);
+		pn_action_client.add(new JScrollPane(tbAction));
 
 
         add(pn1, BorderLayout.PAGE_START);
