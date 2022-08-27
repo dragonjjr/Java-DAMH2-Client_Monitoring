@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Label;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -22,7 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 public class ClientGUI extends JPanel implements ActionListener {
-	JPanel pn1, pn2, pn3, pn4;
+	JPanel panelGridBagLayout,pn1;
 	boolean btnSaveModeClient = false;
 	JLabel lb_title, lb_client_ip, lb_client_port;
 	JTextField tf_client_ip, tf_client_port;
@@ -35,21 +37,35 @@ public class ClientGUI extends JPanel implements ActionListener {
 	public ClientGUI() {
 		super(new BorderLayout());
 
+		panelGridBagLayout = new JPanel();
 		pn1 = new JPanel();
+		
+		// Set up layout for panel
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		panelGridBagLayout.setLayout(gridBagLayout);
 
 		lb_title = new JLabel();
-		lb_title.setForeground(Color.RED);
-		lb_title.setFont(new Font("Arial",Font.BOLD,16));
+		lb_title.setForeground(Color.BLACK);
+		lb_title.setFont(new Font("Arial", Font.BOLD, 20));
 		lb_title.setText("Monitoring");
+
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 0;
+		gridBagConstraints.gridwidth = 2;
+		// gridBagConstraints.gridheight = 0;
+		gridBagConstraints.insets = new Insets(10, 50, 10, 50);
+		panelGridBagLayout.add(lb_title, gridBagConstraints);
+		gridBagConstraints.gridwidth = 1;
 		
 		lb_client_ip = new JLabel();
-		lb_client_ip.setForeground(Color.RED);
+		lb_client_ip.setForeground(Color.BLACK);
 		lb_client_ip.setText("IP : ");
-		
+
 		lb_client_port = new JLabel();
-		lb_client_port.setForeground(Color.RED);
+		lb_client_port.setForeground(Color.BLACK);
 		lb_client_port.setText("Port : ");
-		
+
 		tf_client_ip = new JTextField(null, 10);
 		tf_client_ip.setFont(new Font("Arial", Font.BOLD, 12));
 		tf_client_ip.setPreferredSize(new Dimension(110, 25));
@@ -57,7 +73,7 @@ public class ClientGUI extends JPanel implements ActionListener {
 		tf_client_port.setFont(new Font("Arial", Font.BOLD, 12));
 		tf_client_port.setPreferredSize(new Dimension(110, 25));
 
-		//pn1.add(lb_title);
+		// pn1.add(lb_title);
 		pn1.add(Box.createRigidArea(new Dimension(10, 0)));
 		pn1.add(lb_client_ip);
 		pn1.add(Box.createRigidArea(new Dimension(5, 0)));
@@ -67,14 +83,19 @@ public class ClientGUI extends JPanel implements ActionListener {
 		pn1.add(Box.createRigidArea(new Dimension(5, 0)));
 		pn1.add(tf_client_port);
 
-
 		btnConnect = new JButton("Connect");
 		btnConnect.addActionListener(this);
 		btnConnect.setActionCommand("btnConnect");
 		pn1.add(Box.createRigidArea(new Dimension(15, 0)));
 		pn1.add(btnConnect);
 
-		pn2 = new JPanel();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 1;
+		gridBagConstraints.insets = new Insets(0, 10, 5, 10);
+
+		panelGridBagLayout.add(pn1, gridBagConstraints);
+
+		
 		DefaultTableModel table_model = new DefaultTableModel(colMedHdr, 0);
 		tbAction = new JTable(table_model);
 		// Box
@@ -87,7 +108,7 @@ public class ClientGUI extends JPanel implements ActionListener {
 		JPanel pn9 = new JPanel();
 		pn9.setPreferredSize(new Dimension(tbAction.getWidth(), 20));
 
-		add(pn1, BorderLayout.PAGE_START);
+		add(panelGridBagLayout, BorderLayout.PAGE_START);
 		add(pn7, BorderLayout.WEST);
 		add(pn8, BorderLayout.EAST);
 		add(pn9, BorderLayout.SOUTH);
