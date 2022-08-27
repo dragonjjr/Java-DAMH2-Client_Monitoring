@@ -1,8 +1,12 @@
 package server;
 
 import client.Client;
+import client.Message;
 
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.logging.FileHandler;
@@ -86,10 +90,30 @@ public class Server {
 		serverSocket.close();
 	}
 
-	public void addNewClient(Client client) {
+
+	public void addNewClient(Client client) throws IOException {
+		
 		this.listClient.add(client);
-		System.out.println(this.listClient);
 		Main.getGuiServer().updateList_Client();
+		
+		// get the input stream from the connected socket
+		Socket socket = new Socket("localhost", client.getSocket().getPort());
+		InputStream inputStream = socket.getInputStream();
+		// create a DataInputStream so we can read data from it.
+		ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+
+		// read the message from the socket
+		Message message;
+		try {
+			message = (Message)objectInputStream.readObject();
+			Main.getGuiServer().fillTable(message);
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//System.out.println(this.listClient);
+
 	}
 
 }

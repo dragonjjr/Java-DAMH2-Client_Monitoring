@@ -5,12 +5,24 @@ import client.Client;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
+import java.security.MessageDigest;
 
 public class ClientHandle extends Thread{
 
     Client client;
-    public ClientHandle(Socket s) throws IOException {
+    private String messageClient;
+    
+    public String getMessageClient() {
+		return messageClient;
+	}
+
+	public void setMessageClient(String messageClient) {
+		this.messageClient = messageClient;
+	}
+
+	public ClientHandle(Socket s) throws IOException {
         client = new Client();
         client.setSocket(s);
         client.setDos(new DataOutputStream(client.getSocket().getOutputStream()));
@@ -21,11 +33,11 @@ public class ClientHandle extends Thread{
     public void run() {
         try {
             while (true) {
-                String header = client.getDis().readUTF();
-                if (header == null)
-                    throw new IOException();
-
-                System.out.println("Header: " + header);
+//                String header = client.getDis().readUTF();
+//                if (header == null)
+//                    throw new IOException();
+//
+//                System.out.println("Header: " + header);
 
                 Main.getServer().addNewClient(client);
             }

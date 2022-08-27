@@ -10,6 +10,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -32,7 +34,7 @@ public class ClientGUI extends JPanel implements ActionListener {
 	String[] colMedHdr = { "ID", "Time", "Action", "Description" };
 	JButton btnConnect;
 
-	Client client = new Client();
+	Client client = new Client(this);
 
 	public ClientGUI() {
 		super(new BorderLayout());
@@ -132,6 +134,20 @@ public class ClientGUI extends JPanel implements ActionListener {
 		frame.setVisible(true);
 	}
 
+	public void fillTable(Message message) {
+		DefaultTableModel model = (DefaultTableModel) tbAction.getModel();
+		model.setRowCount(0);
+
+		Object[] rowdata = new Object[4];
+		rowdata[0] = (model.getRowCount()+1);
+		rowdata[1] = message.getTime();
+		rowdata[2] = message.getKind();
+		rowdata[3] = message.getAction();
+
+		model.addRow(rowdata);
+
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String str = e.getActionCommand();

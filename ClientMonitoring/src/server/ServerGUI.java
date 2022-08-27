@@ -29,6 +29,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import client.Message;
+
 public class ServerGUI extends JPanel implements ActionListener {
 	JPanel pn1, pn2, pn3, pn4, pn_list_client, pn_action_client, panelGridBagLayout;
 	boolean btnSaveModeServer = false;
@@ -93,7 +95,7 @@ public class ServerGUI extends JPanel implements ActionListener {
 		gridBagConstraints.gridy = 1;
 		gridBagConstraints.insets = new Insets(0, 10, 5, 10);
 		panelGridBagLayout.add(pn1, gridBagConstraints);
-		
+
 		pn_list_client = new JPanel(new BorderLayout());
 		pn_list_client.setBorder(BorderFactory.createTitledBorder("List Client"));
 		tf_search_client = new JTextField(null, 10);
@@ -124,7 +126,12 @@ public class ServerGUI extends JPanel implements ActionListener {
 	public void updateList_Client() {
 		DefaultListModel model1 = (DefaultListModel) list_client.getModel();
 		for (int i = 0; i < Main.getServer().getListClient().size(); i++) {
-			model1.addElement(Main.getServer().getListClient().get(i).getSocket().getInetAddress().getHostAddress());
+			String ipString = Main.getServer().getListClient().get(i).getSocket().getInetAddress().getHostAddress();
+			if(!model1.contains(ipString))
+			{
+				model1.addElement(ipString);
+			}
+			
 		}
 	}
 
@@ -142,6 +149,20 @@ public class ServerGUI extends JPanel implements ActionListener {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+	}
+
+	public void fillTable(Message message) {
+		DefaultTableModel model = (DefaultTableModel) tbAction.getModel();
+		model.setRowCount(0);
+
+		Object[] rowdata = new Object[4];
+		rowdata[0] = (model.getRowCount()+1);
+		rowdata[1] = message.getTime();
+		rowdata[2] = message.getKind();
+		rowdata[3] = message.getAction();
+
+		model.addRow(rowdata);
+
 	}
 
 	@Override

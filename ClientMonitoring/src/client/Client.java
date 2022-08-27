@@ -3,6 +3,7 @@ package client;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 
@@ -10,7 +11,18 @@ public class Client {
     private Socket socket;
     private DataInputStream dis;
     private DataOutputStream dos;
-    public DataInputStream getDis() {
+    private ClientGUI gui;
+    private ObjectOutputStream oos;
+    
+    public ObjectOutputStream getOos() {
+		return oos;
+	}
+
+	public void setOos(ObjectOutputStream oos) {
+		this.oos = oos;
+	}
+
+	public DataInputStream getDis() {
         return dis;
     }
 
@@ -40,20 +52,26 @@ public class Client {
         this.socket = new Socket(ipServer, portServer);
         this.dis = new DataInputStream(this.socket.getInputStream());
         this.dos = new DataOutputStream(this.socket.getOutputStream());
-        Test();
+        this.oos = new ObjectOutputStream(this.socket.getOutputStream());
+        Monitoring();
     }
 
     public void closeSocket() throws IOException {
         socket.close();
     }
 
-    public void Test() {
-        FolderMonitoring fdm = new FolderMonitoring(this.getDis(),this.getDos());
+    public void Monitoring() {
+        FolderMonitoring fdm = new FolderMonitoring(this.gui,this.oos,this.getDis(),this.getDos());
         fdm.start();
     }
 
     public String toString()
     {
         return this.socket.toString();
+    }
+    
+    public Client(ClientGUI gui)
+    {
+    	this.gui = gui;
     }
 }
