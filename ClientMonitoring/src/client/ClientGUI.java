@@ -136,7 +136,7 @@ public class ClientGUI extends JPanel implements ActionListener {
 
 	public void fillTable(Message message) {
 		DefaultTableModel model = (DefaultTableModel) tbAction.getModel();
-		model.setRowCount(0);
+		//model.setRowCount(0);
 
 		Object[] rowdata = new Object[4];
 		rowdata[0] = (model.getRowCount()+1);

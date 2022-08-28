@@ -15,16 +15,7 @@ public class FolderMonitoring extends Thread {
 	private DataOutputStream dos;
 	private DataInputStream dis;
 	private ClientGUI gui;
-	private ObjectOutputStream oos;
 	
-	public ObjectOutputStream getOos() {
-		return oos;
-	}
-
-	public void setOos(ObjectOutputStream oos) {
-		this.oos = oos;
-	}
-
 	Logger logger = Logger.getLogger("MyLog");
 	FileHandler fh;
 
@@ -44,11 +35,10 @@ public class FolderMonitoring extends Thread {
 		this.dis = dis;
 	}
 
-	public FolderMonitoring(ClientGUI gui,ObjectOutputStream oos,DataInputStream dis, DataOutputStream dos) {
-		this.dos = dos;
+	public FolderMonitoring(ClientGUI gui,DataInputStream dis, DataOutputStream dos) {
 		this.dis = dis;
 		this.gui = gui;
-		this.oos = oos;
+		this.dos = dos;
 	}
 
 	@Override
@@ -56,7 +46,7 @@ public class FolderMonitoring extends Thread {
 		try {
 			Message message = new Message();
 			// Client connect server
-			dos.writeUTF("");
+			//dos.writeUTF("");
 		
 			// Mornitoring folder
 			FileSystem fs = FileSystems.getDefault();
@@ -67,17 +57,17 @@ public class FolderMonitoring extends Thread {
 				WatchKey k = ws.take();
 				for (WatchEvent<?> e : k.pollEvents()) {
 					Object c = e.context();
-//					dos.writeUTF(String.valueOf(e.kind()));
-//					dos.writeUTF(String.valueOf(e.count()));
-//					dos.writeUTF(String.valueOf(c));
-					
+					dos.writeUTF(String.valueOf(e.kind()));
+					//dos.writeUTF(String.valueOf(e.count()));
+					dos.writeUTF(String.valueOf(c));
+					//dos.flush();
 					DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 					LocalDateTime now = LocalDateTime.now();
 					message.setTime(dtf.format(now).toString());
 					message.setKind(e.kind().toString());
 					message.setAction(c.toString());
 					
-					oos.writeObject(message);
+					//oos.writeObject(message);
 					
 					System.out.printf("%s %d %s\n", e.kind(), e.count(), c);
 					gui.fillTable(message);

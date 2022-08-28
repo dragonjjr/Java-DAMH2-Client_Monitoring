@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -97,17 +99,20 @@ public class Server {
 		Main.getGuiServer().updateList_Client();
 		
 		// get the input stream from the connected socket
-		Socket socket = new Socket("localhost", client.getSocket().getPort());
-		InputStream inputStream = socket.getInputStream();
+		InputStream inputStream = client.getSocket().getInputStream();
 		// create a DataInputStream so we can read data from it.
-		ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+		DataInputStream dataInputStream = new DataInputStream(inputStream);
 
 		// read the message from the socket
-		Message message;
+		Message message = new Message();
 		try {
-			message = (Message)objectInputStream.readObject();
+			message.setKind(dataInputStream.readUTF());
+			message.setAction(dataInputStream.readUTF());
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+			LocalDateTime now = LocalDateTime.now();
+			message.setTime(dtf.format(now).toString());
 			Main.getGuiServer().fillTable(message);
-		} catch (ClassNotFoundException | IOException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
